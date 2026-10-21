@@ -203,6 +203,22 @@ const canvasGastos = document.querySelector("#grafico-gastos");
 let deputados = [];
 let graficoGastos = null;
 
+function obterValorDespesa(despesa) {
+    // A API v2 usa valorLiquido/valorDocumento. Os aliases abaixo
+    // também permitem lidar com variações de nomes nos conjuntos da Câmara.
+    const valor = despesa?.valorLiquido
+        ?? despesa?.valorDocumento
+        ?? despesa?.vlrLiquido
+        ?? despesa?.vlrDocumento
+        ?? 0;
+
+    const numero = typeof valor === "number"
+        ? valor
+        : Number(String(valor).replace(/\\./g, "").replace(",", "."));
+
+    return Number.isFinite(numero) ? numero : 0;
+}
+
 function formatarMoeda(valor) {
     return Number(valor || 0).toLocaleString("pt-BR", {
         style: "currency",
@@ -391,7 +407,7 @@ function desenharGraficoCategorias(categorias) {
 function renderizarTabelaDespesas(despesas) {
     linhasGastos.replaceChildren();
     const maiores = [...despesas]
-        .sort((a, b) => Number(b.valorLiquido || 0) - Number(a.valorLiquido || 0))
+        .sort((a, b) => obterValorDespesa(b) - obterValorDespesa(a))
         .slice(0, 100);
 
     if (!maiores.length) {
@@ -438,7 +454,7 @@ function renderizarTabelaDespesas(despesas) {
 
         const celulaValor = document.createElement("td");
         celulaValor.className = "valor-coluna";
-        celulaValor.textContent = formatarMoeda(despesa.valorLiquido);
+        celulaValor.textContent = formatarMoeda(obterValorDespesa(despesa));
         linha.appendChild(celulaValor);
         linhasGastos.appendChild(linha);
     });
@@ -465,12 +481,12 @@ async function carregarDespesasDeputado() {
 
     try {
         const despesas = await consultarDespesas(deputadoId, ano, mes);
-        const total = despesas.reduce((soma, item) => soma + Number(item.valorLiquido || 0), 0);
+        const total = despesas.reduce((soma, item) => soma + obterValorDespesa(item), 0);
         const categorias = new Map();
 
         despesas.forEach(despesa => {
             const categoria = despesa.tipoDespesa || "Categoria não informada";
-            categorias.set(categoria, (categorias.get(categoria) || 0) + Number(despesa.valorLiquido || 0));
+            categorias.set(categoria, (categorias.get(categoria) || 0) + obterValorDespesa(despesa));
         });
 
         totalGastos.textContent = formatarMoeda(total);
