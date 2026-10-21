@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Brasil em Dados</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Biblioteca para criar gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header class="topbar">
+        <a href="#" class="logo">BR<span>.</span>DATA</a>
+        <span class="status">● Dados oficiais</span>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <p class="eyebrow">PAINEL ECONÔMICO</p>
+            <h1>A economia brasileira,<br>em dados.</h1>
+            <p class="descricao">
+                Acompanhe indicadores econômicos a partir de dados
+                públicos do Banco Central do Brasil.
+            </p>
+        </section>
+
+        <section class="indicadores">
+            <article class="card">
+                <p class="card-label">META SELIC</p>
+                <h2 id="valor-selic">--</h2>
+                <p class="card-descricao">Taxa anual de juros</p>
+            </article>
+
+            <article class="card">
+                <p class="card-label">IPCA</p>
+                <h2 id="valor-ipca">--</h2>
+                <p class="card-descricao">Variação mensal</p>
+            </article>
+        </section>
+
+        <section class="painel">
+            <div class="painel-header">
+                <div>
+                    <p class="eyebrow">SÉRIE HISTÓRICA</p>
+                    <h2>Meta Selic</h2>
+                </div>
+
+                <span class="unidade">% ao ano</span>
+            </div>
+
+            <div class="grafico">
+                <canvas id="grafico-selic"></canvas>
+            </div>
+        </section>
+
+        <p id="mensagem" role="status">Carregando indicadores...</p>
+
+        <footer>
+            <p>Fonte: Banco Central do Brasil · SGS</p>
+            <a
+                href="https://dadosabertos.bcb.gov.br/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Dados abertos ↗
+            </a>
+        </footer>
+    </main>
+</body>
+</html>
