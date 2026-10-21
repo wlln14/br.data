@@ -335,3 +335,232 @@ footer a:hover {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* =========================
+   TRANSPARÊNCIA PARLAMENTAR
+   ========================= */
+
+.transparencia {
+    padding-top: 76px;
+    scroll-margin-top: 24px;
+}
+
+.secao-intro {
+    margin-bottom: 28px;
+}
+
+.secao-intro h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    letter-spacing: -1.2px;
+}
+
+.secao-intro .descricao {
+    max-width: 720px;
+}
+
+.filtros-gastos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    padding: 22px;
+    margin-bottom: 16px;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+}
+
+.filtros-gastos label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--texto-secundario);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.filtros-gastos select,
+.filtros-gastos button {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 10px 12px;
+    color: var(--texto);
+    background: #0d100e;
+    border: 1px solid var(--borda);
+    border-radius: 9px;
+    font: inherit;
+}
+
+.filtros-gastos select:focus,
+.filtros-gastos button:focus-visible {
+    outline: 2px solid var(--verde);
+    outline-offset: 2px;
+}
+
+.filtros-gastos button {
+    align-self: end;
+    grid-column: span 2;
+    color: #07110a;
+    background: var(--verde);
+    border-color: var(--verde);
+    font-weight: 800;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.filtros-gastos button:hover:not(:disabled) {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+.filtros-gastos button:disabled,
+.filtros-gastos select:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.mensagem-gastos {
+    min-height: 24px;
+    margin: 12px 0 18px;
+    color: var(--texto-secundario);
+    font-size: 0.84rem;
+    line-height: 1.6;
+}
+
+.resumo-gastos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.resumo-gastos .card {
+    min-width: 0;
+    min-height: 145px;
+}
+
+.resumo-gastos .card h3 {
+    margin-top: 20px;
+    color: var(--verde);
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+}
+
+.gastos-painel,
+.tabela-painel {
+    margin-bottom: 20px;
+}
+
+.tabela-scroll {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabela-gastos {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+    text-align: left;
+}
+
+.tabela-gastos th,
+.tabela-gastos td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--borda);
+    vertical-align: top;
+}
+
+.tabela-gastos th {
+    color: var(--texto-secundario);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
+}
+
+.tabela-gastos td {
+    color: #dfe5e0;
+    line-height: 1.5;
+}
+
+.tabela-gastos tbody tr:hover {
+    background: var(--superficie-hover);
+}
+
+.tabela-gastos .valor-coluna {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.tabela-gastos td.valor-coluna {
+    color: var(--verde);
+    font-weight: 700;
+}
+
+.tabela-gastos a,
+.nota-transparencia a {
+    color: var(--verde);
+    text-decoration: none;
+}
+
+.tabela-gastos a:hover,
+.nota-transparencia a:hover {
+    text-decoration: underline;
+}
+
+.tabela-vazia {
+    padding: 24px !important;
+    color: var(--texto-secundario) !important;
+    text-align: center;
+}
+
+.nota-transparencia {
+    margin: 12px 0 0;
+    padding: 18px;
+    color: var(--texto-secundario);
+    background: #111713;
+    border-left: 3px solid var(--verde);
+    border-radius: 0 10px 10px 0;
+    font-size: 0.82rem;
+    line-height: 1.8;
+}
+
+@media (max-width: 760px) {
+    .filtros-gastos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 16px;
+    }
+
+    .filtros-gastos button {
+        grid-column: span 2;
+    }
+
+    .resumo-gastos {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .resumo-gastos .card {
+        min-height: 125px;
+    }
+
+    .transparencia {
+        padding-top: 54px;
+    }
+}
+
+@media (max-width: 420px) {
+    .filtros-gastos {
+        grid-template-columns: 1fr;
+    }
+
+    .filtros-gastos button {
+        grid-column: auto;
+    }
+
+    .tabela-gastos {
+        font-size: 0.78rem;
+    }
+}
