@@ -319,6 +319,9 @@ async function consultarDespesas(deputadoId, ano, mes) {
     // como proteção contra uma resposta inesperadamente grande.
     for (let pagina = 1; pagina <= 100; pagina++) {
         const lote = await consultarCamara(`deputados/${deputadoId}/despesas`, {
+            // A API da Câmara deixou de inferir a legislatura atual automaticamente.
+            // 57 é a legislatura vigente (2023–2027).
+            idLegislatura: 57,
             ano,
             mes,
             itens: 100,
