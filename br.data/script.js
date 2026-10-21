@@ -1,4 +1,3 @@
-
 const valorSelic = document.querySelector("#valor-selic");
 const valorIpca = document.querySelector("#valor-ipca");
 const mensagem = document.querySelector("#mensagem");
@@ -6,10 +5,28 @@ const canvas = document.querySelector("#grafico-selic");
 
 const API = "https://api.bcb.gov.br/dados/serie/bcdata.sgs";
 
-async function consultarSerie(codigo, quantidade = 12) {
-    const url =
-        `${API}.${codigo}/dados/ultimos/${quantidade}?formato=json`;
+// O Banco Central exige filtros de data para séries diárias.
+// Consultamos os últimos 12 meses em vez de usar /ultimos/12.
+function formatarDataConsulta(data) {
+    const dia = String(data.getDate()).padStart(2, "0");
+    const mes = String(data.getMonth() + 1).padStart(2, "0");
+    const ano = data.getFullYear();
 
+    return `${dia}/${mes}/${ano}`;
+}
+
+async function consultarSerie(codigo, meses = 12) {
+    const dataFinal = new Date();
+    const dataInicial = new Date();
+    dataInicial.setMonth(dataInicial.getMonth() - meses);
+
+    const parametros = new URLSearchParams({
+        formato: "json",
+        dataInicial: formatarDataConsulta(dataInicial),
+        dataFinal: formatarDataConsulta(dataFinal)
+    });
+
+    const url = `${API}.${codigo}/dados?${parametros.toString()}`;
     const resposta = await fetch(url);
 
     if (!resposta.ok) {
@@ -42,16 +59,22 @@ function criarGrafico(dados) {
         throw new Error("Chart.js não foi carregado.");
     }
 
-    const historico = [...dados].sort(
-        (a, b) =>
+    const hoje = new Date();
+    hoje.setHours(23, 59, 59, 999);
+
+    // A série da Meta Selic pode incluir datas futuras.
+    const historico = dados
+        .filter(item => converterData(item.data) <= hoje)
+        .sort((a, b) =>
             converterData(a.data) - converterData(b.data)
-    );
+        );
+
+    if (!historico.length) {
+        throw new Error("Não há observações históricas para o gráfico.");
+    }
 
     const existente = Chart.getChart(canvas);
-
-    if (existente) {
-        existente.destroy();
-    }
+    if (existente) existente.destroy();
 
     new Chart(canvas, {
         type: "line",
@@ -63,10 +86,10 @@ function criarGrafico(dados) {
                 borderColor: "#4ade80",
                 backgroundColor: "rgba(74, 222, 128, 0.12)",
                 borderWidth: 2,
-                pointRadius: 3,
-                pointHoverRadius: 6,
+                pointRadius: 0,
+                pointHoverRadius: 5,
                 fill: true,
-                tension: 0.3
+                tension: 0.2
             }]
         },
         options: {
@@ -99,17 +122,14 @@ function criarGrafico(dados) {
 
 async function carregarIndicadores() {
     const erros = [];
-
     mensagem.textContent = "Consultando Banco Central...";
 
-    // Carrega a Selic independentemente do IPCA.
     try {
         const dadosSelic = await consultarSerie(432);
-
         const hoje = new Date();
         hoje.setHours(23, 59, 59, 999);
 
-        const observacaoSelic = dadosSelic
+        const observacaoSelic = [...dadosSelic]
             .filter(item => converterData(item.data) <= hoje)
             .sort((a, b) =>
                 converterData(b.data) - converterData(a.data)
@@ -134,14 +154,16 @@ async function carregarIndicadores() {
         erros.push(`Selic: ${erro.message}`);
     }
 
-    // O IPCA é consultado separadamente.
     try {
         const dadosIpca = await consultarSerie(433);
-
         const observacaoIpca = [...dadosIpca].sort(
             (a, b) =>
                 converterData(b.data) - converterData(a.data)
         )[0];
+
+        if (!observacaoIpca) {
+            throw new Error("Não foi encontrada uma observação do IPCA.");
+        }
 
         valorIpca.textContent =
             formatarPercentual(observacaoIpca.valor);
@@ -153,8 +175,7 @@ async function carregarIndicadores() {
 
     mensagem.textContent = erros.length
         ? `Alguns dados não carregaram: ${erros.join(" | ")}`
-        : "Indicadores carregados. " +
-          "Os períodos de referência são informados pela API.";
+        : "Indicadores carregados. Os períodos de referência são informados pela API.";
 }
 
 carregarIndicadores();
