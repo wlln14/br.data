@@ -564,3 +564,30 @@ footer a:hover {
         font-size: 0.78rem;
     }
 }
+
+
+.nav-transparencia {
+    margin-left: auto;
+    margin-right: 18px;
+    color: var(--texto-secundario);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 650;
+    transition: color 0.2s ease;
+}
+
+.nav-transparencia:hover {
+    color: var(--verde);
+}
+
+@media (max-width: 520px) {
+    .nav-transparencia {
+        margin-right: 10px;
+        font-size: 0.72rem;
+    }
+
+    .status {
+        padding: 7px 9px;
+        font-size: 0.68rem;
+    }
+}
