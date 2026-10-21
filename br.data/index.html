@@ -59,6 +59,133 @@
             </div>
         </section>
 
+        <section class="transparencia" id="transparencia">
+            <div class="secao-intro">
+                <p class="eyebrow">TRANSPARÊNCIA PÚBLICA</p>
+                <h2>Para onde vai o dinheiro?</h2>
+                <p class="descricao">
+                    Consulte despesas registradas na Cota para o Exercício da Atividade Parlamentar (CEAP)
+                    de deputados federais, usando os Dados Abertos da Câmara dos Deputados.
+                </p>
+            </div>
+
+            <div class="filtros-gastos">
+                <label>
+                    Estado (UF)
+                    <select id="filtro-uf">
+                        <option value="">Todos os estados</option>
+                    </select>
+                </label>
+                <label>
+                    Partido
+                    <select id="filtro-partido">
+                        <option value="">Todos os partidos</option>
+                    </select>
+                </label>
+                <label>
+                    Deputado
+                    <select id="filtro-deputado" disabled>
+                        <option value="">Carregando deputados...</option>
+                    </select>
+                </label>
+                <label>
+                    Ano
+                    <select id="filtro-ano">
+                        <option value="2026">2026</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                    </select>
+                </label>
+                <label>
+                    Mês
+                    <select id="filtro-mes">
+                        <option value="">Ano inteiro</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </label>
+                <button id="buscar-gastos" type="button" disabled>Consultar despesas</button>
+            </div>
+
+            <p id="mensagem-gastos" class="mensagem-gastos" role="status" aria-live="polite">
+                Carregando lista de deputados...
+            </p>
+
+            <div class="resumo-gastos">
+                <article class="card">
+                    <p class="card-label">TOTAL REGISTRADO</p>
+                    <h3 id="total-gastos">—</h3>
+                    <p class="card-descricao">Soma das despesas retornadas pela API</p>
+                </article>
+                <article class="card">
+                    <p class="card-label">LANÇAMENTOS</p>
+                    <h3 id="quantidade-gastos">—</h3>
+                    <p class="card-descricao">Registros encontrados no período</p>
+                </article>
+                <article class="card">
+                    <p class="card-label">MAIOR CATEGORIA</p>
+                    <h3 id="categoria-principal">—</h3>
+                    <p class="card-descricao">Por valor líquido somado</p>
+                </article>
+            </div>
+
+            <div class="painel gastos-painel">
+                <div class="painel-header">
+                    <div>
+                        <p class="eyebrow">DETALHAMENTO</p>
+                        <h2>Despesas por categoria</h2>
+                    </div>
+                    <span class="unidade">Valor líquido (R$)</span>
+                </div>
+                <div class="grafico">
+                    <canvas id="grafico-gastos"></canvas>
+                </div>
+            </div>
+
+            <div class="painel tabela-painel">
+                <div class="painel-header">
+                    <div>
+                        <p class="eyebrow">REGISTROS</p>
+                        <h2>Maiores despesas encontradas</h2>
+                    </div>
+                </div>
+                <div class="tabela-scroll">
+                    <table class="tabela-gastos">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tipo de despesa</th>
+                                <th>Fornecedor</th>
+                                <th>Documento</th>
+                                <th class="valor-coluna">Valor líquido</th>
+                            </tr>
+                        </thead>
+                        <tbody id="linhas-gastos">
+                            <tr><td colspan="5" class="tabela-vazia">Selecione um deputado para consultar.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <p class="nota-transparencia">
+                Importante: os valores são os registros retornados pela API para o deputado e período selecionados.
+                A Cota Parlamentar cobre despesas do exercício do mandato e não representa todos os gastos públicos.
+                Confira os dados originais no
+                <a href="https://www.camara.leg.br/transparencia/gastos-parlamentares/" target="_blank" rel="noopener noreferrer">portal oficial da Câmara ↗</a>.
+            </p>
+        </section>
+
         <p id="mensagem" role="status">Carregando indicadores...</p>
 
         <footer>
